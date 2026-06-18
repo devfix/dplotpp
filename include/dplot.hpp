@@ -4,45 +4,41 @@
 
 #pragma once
 
-#include <NumCpp/NdArray/NdArrayCore.hpp>
 #include <map>
 #include <optional>
 #include <string>
 #include <utility>
 #include <vector>
 
-namespace dplot
-{
-    enum class XAxis
-    {
+namespace dplot {
+    enum class XAxis {
         T,
         B
     };
-    enum class YAxis
-    {
+
+    enum class YAxis {
         L,
         R
     };
-    enum class ExportType
-    {
+
+    enum class ExportType {
         LATEX,
         PDF,
         SVG
     };
 
-    using TypeData = nc::NdArray<double>;
+    //using TypeData = nc::NdArray<double>;
+    using TypeData = std::vector<double>;
 
     // Environment Constants Declaration
-    struct Environment
-    {
+    struct Environment {
         static const std::string PATH_PDFLATEX;
         static const std::string PATH_PDF2SVG;
         static const std::string PATH_SCOUR;
     };
 
     // Configuration Structs
-    struct GridSetup
-    {
+    struct GridSetup {
         bool major_enable = false;
         std::string major_thickness = "thin";
         std::string major_color = "black";
@@ -51,8 +47,7 @@ namespace dplot
         std::string minor_thickness = "very thin";
     };
 
-    struct TickSetup
-    {
+    struct TickSetup {
         bool enable = true;
         bool opposite = false;
         std::string major_thickness = "thin";
@@ -63,8 +58,7 @@ namespace dplot
         int minor_num = 0;
     };
 
-    struct LegendSetup
-    {
+    struct LegendSetup {
         bool enable = true;
         std::string anchor = "north east";
         std::string align = "left";
@@ -73,21 +67,19 @@ namespace dplot
         double scale = 0.8;
     };
 
-    struct AxisSetup
-    {
+    struct AxisSetup {
         std::string label;
         std::string label_shift = "0cm";
         double scale = 1.0;
         bool log = false;
         std::string log_base = "10";
-        std::optional<std::pair<double, double>> limits = std::nullopt;
+        std::optional<std::pair<double, double> > limits = std::nullopt;
         std::string padding = "0cm";
         GridSetup grid;
         TickSetup tick;
     };
 
-    struct LineSetup
-    {
+    struct LineSetup {
         std::string plot_color = "black";
         std::string line_style = "solid";
         std::string line_width = "1pt";
@@ -97,8 +89,7 @@ namespace dplot
     };
 
     // Data Class Declaration
-    class Data
-    {
+    class Data {
     public:
         XAxis ax;
         YAxis ay;
@@ -114,8 +105,7 @@ namespace dplot
     };
 
     // Figure Class Declaration
-    class Figure
-    {
+    class Figure {
     public:
         std::string name;
         std::string title;
@@ -125,11 +115,12 @@ namespace dplot
         std::string background_color = "white";
         LegendSetup legend_setup;
 
-        std::map<char, std::optional<AxisSetup>> axes;
+        std::map<char, std::optional<AxisSetup> > axes;
         std::vector<Data> plot_data;
 
     private:
         int _data_counter = 0;
+
         void _validate();
 
     public:
@@ -137,11 +128,11 @@ namespace dplot
 
         void add(Data data);
 
-        Data &plot(XAxis ax, YAxis ay, const TypeData &dx, const TypeData &dy, std::string label = "", const std::optional<LineSetup> &ls = std::nullopt);
+        Data &plot(XAxis ax, YAxis ay, const TypeData &dx, const TypeData &dy, std::string label = "",
+                   const std::optional<LineSetup> &ls = std::nullopt);
 
         void show();
 
         void export_figure(const std::string &path_out_dir, const std::vector<ExportType> &types);
     };
-
 } // namespace dplot
